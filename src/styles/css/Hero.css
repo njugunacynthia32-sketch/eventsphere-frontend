@@ -1,60 +1,118 @@
 .hero{
+    background:#FFF8F5;
+    padding:80px 8%;
+}
+
+.hero-content{
     display:flex;
     justify-content:space-between;
     align-items:center;
-    padding:80px;
-    min-height:85vh;
+    gap:60px;
 }
 
-.hero-left{
-    width:50%;
+.hero-text{
+    flex:1;
 }
 
-.hero-left h1{
+.badge{
+    display:inline-block;
+    background:#FCE7F3;
+    color:#EC4899;
+    padding:10px 18px;
+    border-radius:999px;
+    font-size:14px;
+    font-weight:600;
+    margin-bottom:25px;
+}
+
+.hero-text h1{
     font-size:64px;
-    color:#333;
-    line-height:1.2;
+    line-height:1.1;
+    color:#374151;
+    margin-bottom:25px;
 }
 
-.hero-left p{
-    margin:30px 0;
+.hero-text p{
     font-size:18px;
-    color:#666;
+    color:#6B7280;
+    max-width:520px;
+    line-height:1.8;
+    margin-bottom:35px;
 }
 
 .hero-buttons{
     display:flex;
-    gap:20px;
+    gap:18px;
 }
 
-.secondary-btn{
-    padding:14px 30px;
-    border-radius:30px;
-    border:2px solid #EC407A;
+.btn-primary,
+.btn-secondary{
+    text-decoration:none;
+    padding:14px 28px;
+    border-radius:999px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.btn-primary{
+    background:#EC4899;
+    color:white;
+}
+
+.btn-primary:hover{
+    transform:translateY(-3px);
+}
+
+.btn-secondary{
+    border:2px solid #EC4899;
+    color:#EC4899;
     background:white;
-    color:#EC407A;
+}
+
+.hero-card{
+    width:360px;
+    background:white;
+    border-radius:24px;
+    padding:30px;
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+}
+
+.hero-card h3{
+    color:#EC4899;
+    margin-bottom:25px;
+}
+
+.event{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:18px;
+    padding-bottom:12px;
+    border-bottom:1px solid #f2f2f2;
+}
+
+.reminder{
+    margin-top:20px;
+    background:#FCE7F3;
+    color:#EC4899;
+    padding:14px;
+    text-align:center;
+    border-radius:14px;
     font-weight:600;
 }
 
-.hero-right{
-    display:flex;
-    justify-content:center;
-    width:40%;
+@media(max-width:900px){
+
+.hero-content{
+    flex-direction:column;
+    text-align:center;
 }
 
-.calendar-card{
-    background:white;
-    padding:35px;
-    border-radius:25px;
-    box-shadow:0 8px 30px rgba(0,0,0,.08);
-    width:340px;
+.hero-text h1{
+    font-size:48px;
 }
 
-.calendar-card h3{
-    margin-bottom:20px;
-    color:#EC407A;
+.hero-card{
+    width:100%;
+    max-width:380px;
 }
-
-.calendar-card p{
-    margin:15px 0;
 }

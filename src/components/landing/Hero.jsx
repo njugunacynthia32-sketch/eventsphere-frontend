@@ -1,64 +1,70 @@
-import "../../styles/css/Hero.css";
 import { Link } from "react-router-dom";
+import "../../styles/css/Hero.css";
 
 function Hero() {
   return (
     <section className="hero">
+      <div className="hero-content">
 
-      <div className="hero-left">
+        <div className="hero-text">
 
-        <h1>
-          Plan every
-          <br />
-          moment,
-          <br />
-          beautifully.
-        </h1>
+          <span className="badge">
+            ✨ Loved by 12,000+ planners
+          </span>
 
-        <p>
-          EventSphere helps you organize birthdays,
-          travel, work events and everything in between
-          in one beautiful place.
-        </p>
+          <h1>
+            Plan every
+            <br />
+            moment,
+            <br />
+            beautifully.
+          </h1>
 
-        <div className="hero-buttons">
+          <p>
+            EventSphere helps you organize birthdays, work, travel,
+            fitness, and every special moment in one beautiful place.
+          </p>
 
-          <Link to="/register">
-            <button className="primary-btn">
-              Get Started
+          <div className="hero-buttons">
+
+            <Link to="/register" className="btn-primary">
+              Start Planning
+            </Link>
+
+            <button className="btn-secondary">
+              See It in Action
             </button>
-          </Link>
 
-          <Link to="/login">
-            <button className="secondary-btn">
-              Sign In
-            </button>
-          </Link>
+          </div>
+
+        </div>
+
+        <div className="hero-card">
+
+          <h3>📅 July 2026</h3>
+
+          <div className="event">
+            <span>🧘 Yoga Class</span>
+            <small>07:30 AM</small>
+          </div>
+
+          <div className="event">
+            <span>💼 Team Standup</span>
+            <small>10:00 AM</small>
+          </div>
+
+          <div className="event">
+            <span>🎂 Sophie's Birthday</span>
+            <small>06:00 PM</small>
+          </div>
+
+          <div className="reminder">
+            ✨ Reminder Set!
+          </div>
 
         </div>
 
       </div>
-
-      <div className="hero-right">
-
-        <div className="calendar-card">
-
-          <h3>July 2026</h3>
-
-          <p>📅 3 Events this week</p>
-
-          <hr />
-
-          <p>🧘 Yoga Class - 7:30 AM</p>
-
-          <p>💼 Team Standup - 10:00 AM</p>
-
-          <p>🎂 Sophie's Birthday - 6:00 PM</p>
-
-        </div>
-
-      </div>
-
     </section>
   );
 }

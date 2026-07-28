@@ -1,7 +1,15 @@
+import "../../styles/css/Footer.css";
+
 function Footer() {
   return (
-    <footer style={{textAlign:"center", padding:"40px"}}>
-      © 2026 EventSphere
+    <footer className="footer">
+      <h2>🌸 EventSphere</h2>
+
+      <p>Making every moment beautifully organized.</p>
+
+      <small>
+        © 2026 EventSphere. All Rights Reserved.
+      </small>
     </footer>
   );
 }
