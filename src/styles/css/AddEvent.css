@@ -1,0 +1,36 @@
+.add-event{
+    max-width:700px;
+}
+
+.add-event h1{
+    margin-bottom:30px;
+}
+
+.event-form{
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+}
+
+.event-form input,
+.event-form select,
+.event-form textarea{
+    padding:14px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    font-size:16px;
+}
+
+.event-form textarea{
+    resize:vertical;
+}
+
+.event-form button{
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    background:#EC4899;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
