@@ -1,59 +1,103 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../services/api";
 import "../styles/css/Register.css";
 
 function Register() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+    password: "",
+    phone: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    try {
+      await api.register(formData);
+
+      navigate("/login");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <div className="auth-card">
+        <h1>Create Account 🌸</h1>
+        <p>Start organizing your beautiful moments.</p>
 
-        <h1 className="logo">🌸 EventSphere</h1>
+        {error && <div className="auth-error">{error}</div>}
 
-        <h2>Create Your Account</h2>
-
-        <p className="subtitle">
-          Start organizing your beautiful moments today.
-        </p>
-
-        <form className="auth-form">
-
-          <label>Full Name</label>
+        <form onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Enter your full name"
+            name="full_name"
+            placeholder="Full Name"
+            value={formData.full_name}
+            onChange={handleChange}
+            required
           />
 
-          <label>Email</label>
           <input
             type="email"
-            placeholder="Enter your email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
 
-          <label>Password</label>
+          <input
+            type="text"
+            name="phone"
+            placeholder="Phone Number"
+            value={formData.phone}
+            onChange={handleChange}
+          />
+
           <input
             type="password"
-            placeholder="Create a password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            minLength="6"
           />
 
-          <label>Confirm Password</label>
-          <input
-            type="password"
-            placeholder="Confirm your password"
-          />
-
-          <button type="submit" className="auth-btn">
-            Create Account
+          <button type="submit" disabled={loading}>
+            {loading ? "Creating Account..." : "Create Account"}
           </button>
-
         </form>
 
-        <p className="bottom-text">
+        <p>
           Already have an account?{" "}
           <Link to="/login">Log In</Link>
         </p>
-
       </div>
     </div>
   );
 }
 
 export default Register;
+

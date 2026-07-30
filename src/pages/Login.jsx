@@ -1,50 +1,86 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import api from "../services/api";
 import "../styles/css/Login.css";
 
 function Login() {
+  const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    try {
+      const data = await api.login(formData);
+
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      navigate("/dashboard");
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <div className="auth-card">
+        <h1>Welcome Back 🌸</h1>
+        <p>Log in to your EventSphere account.</p>
 
-        <h1 className="logo">🌸 EventSphere</h1>
+        {error && <div className="auth-error">{error}</div>}
 
-        <h2>Welcome Back!</h2>
-
-        <p className="subtitle">
-          Sign in to continue planning your beautiful moments.
-        </p>
-
-        <form className="auth-form">
-
-          <label>Email</label>
+        <form onSubmit={handleSubmit}>
           <input
             type="email"
-            placeholder="Enter your email"
+            name="email"
+            placeholder="Email"
+            value={formData.email}
+            onChange={handleChange}
+            required
           />
 
-          <label>Password</label>
           <input
             type="password"
-            placeholder="Enter your password"
+            name="password"
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            required
           />
 
-          <div className="forgot-link">
-            <Link to="/forgot-password">
-              Forgot Password?
-            </Link>
-          </div>
-
-          <button type="submit" className="auth-btn">
-            Log In
+          <button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Log In"}
           </button>
-
         </form>
 
-        <p className="bottom-text">
+        <Link to="/forgot-password">
+          Forgot your password?
+        </Link>
+
+        <p>
           Don't have an account?{" "}
           <Link to="/register">Sign Up</Link>
         </p>
-
       </div>
     </div>
   );
