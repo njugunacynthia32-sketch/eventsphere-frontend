@@ -13,6 +13,7 @@ function Login() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     setFormData({
@@ -34,8 +35,8 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
 
       navigate("/dashboard");
-    } catch (error) {
-      setError(error.message);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -45,9 +46,14 @@ function Login() {
     <div className="auth-page">
       <div className="auth-card">
         <h1>Welcome Back 🌸</h1>
+
         <p>Log in to your EventSphere account.</p>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit}>
           <input
@@ -59,27 +65,41 @@ function Login() {
             required
           />
 
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-          />
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+
+            <button
+              type="button"
+              className="password-toggle"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? "🙈" : "👁"}
+            </button>
+          </div>
 
           <button type="submit" disabled={loading}>
             {loading ? "Logging in..." : "Log In"}
           </button>
         </form>
 
-        <Link to="/forgot-password">
-          Forgot your password?
-        </Link>
+        <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <Link to="/forgot-password">
+            Forgot your password?
+          </Link>
+        </div>
 
-        <p>
+        <p style={{ marginTop: "20px" }}>
           Don't have an account?{" "}
-          <Link to="/register">Sign Up</Link>
+          <Link to="/register">
+            Sign Up
+          </Link>
         </p>
       </div>
     </div>

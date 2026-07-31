@@ -1,2 +1,9 @@
 @import "./Login.css";
 
+.auth-card {
+  max-width: 460px;
+}
+
+.auth-card h1 {
+  margin-bottom: 15px;
+}
