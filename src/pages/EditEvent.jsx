@@ -1,16 +1,42 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout";
+import api from "../services/api";
 import "../styles/css/AddEvent.css";
 
 function EditEvent() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    title: "Sophie's Birthday",
-    category: "Birthday",
-    date: "2026-07-24",
-    time: "18:00",
-    location: "Nairobi",
-    description: "Birthday celebration with family and friends.",
+    title: "",
+    description: "",
+    date: "",
+    time: "",
+    location: "",
+    category_id: "",
   });
+
+  useEffect(() => {
+    loadEvent();
+  }, []);
+
+  const loadEvent = async () => {
+    try {
+      const event = await api.getEvent(id);
+
+      setFormData({
+        title: event.title,
+        description: event.description || "",
+        date: event.date,
+        time: event.time,
+        location: event.location || "",
+        category_id: event.category_id,
+      });
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -19,9 +45,16 @@ function EditEvent() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Event updated successfully!");
+
+    try {
+      await api.updateEvent(id, formData);
+      alert("Event updated successfully");
+      navigate("/events");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -31,25 +64,11 @@ function EditEvent() {
 
         <form className="event-form" onSubmit={handleSubmit}>
           <input
-            type="text"
             name="title"
             value={formData.title}
             onChange={handleChange}
             required
           />
-
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="Birthday">Birthday</option>
-            <option value="Work">Work</option>
-            <option value="Travel">Travel</option>
-            <option value="Fitness">Fitness</option>
-            <option value="Personal">Personal</option>
-          </select>
 
           <input
             type="date"
@@ -68,11 +87,9 @@ function EditEvent() {
           />
 
           <input
-            type="text"
             name="location"
             value={formData.location}
             onChange={handleChange}
-            placeholder="Location"
           />
 
           <textarea
@@ -80,10 +97,11 @@ function EditEvent() {
             rows="5"
             value={formData.description}
             onChange={handleChange}
-            placeholder="Description"
           />
 
-          <button type="submit">Update Event</button>
+          <button type="submit">
+            Update Event
+          </button>
         </form>
       </div>
     </AppLayout>

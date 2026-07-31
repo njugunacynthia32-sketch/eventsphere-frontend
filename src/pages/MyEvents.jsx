@@ -1,31 +1,28 @@
+import { useEffect, useState } from "react";
 import AppLayout from "../components/layout/AppLayout";
 import EventCard from "../components/common/EventCard";
+import api from "../services/api";
 import "../styles/css/MyEvents.css";
 
 function MyEvents() {
-  const events = [
-    {
-      id: 1,
-      title: "Sophie's Birthday",
-      category: "Birthday",
-      date: "24 July 2026",
-      time: "6:00 PM",
-    },
-    {
-      id: 2,
-      title: "Team Meeting",
-      category: "Work",
-      date: "26 July 2026",
-      time: "10:00 AM",
-    },
-    {
-      id: 3,
-      title: "Nairobi Trip",
-      category: "Travel",
-      date: "30 July 2026",
-      time: "8:00 AM",
-    },
-  ];
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
+
+  const loadEvents = async () => {
+    try {
+      const data = await api.getEvents();
+      setEvents(data);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const removeEvent = (id) => {
+    setEvents(events.filter((event) => event.id !== id));
+  };
 
   return (
     <AppLayout>
@@ -37,22 +34,24 @@ function MyEvents() {
 
           <select>
             <option>All Categories</option>
-            <option>Birthday</option>
-            <option>Work</option>
-            <option>Travel</option>
-            <option>Fitness</option>
           </select>
         </div>
 
-        {events.map((event) => (
-          <EventCard
-            key={event.id}
-            title={event.title}
-            category={event.category}
-            date={event.date}
-            time={event.time}
-          />
-        ))}
+        {events.length === 0 ? (
+          <p>No events found.</p>
+        ) : (
+          events.map((event) => (
+            <EventCard
+              key={event.id}
+              id={event.id}
+              title={event.title}
+              category={event.category_id}
+              date={event.date}
+              time={event.time}
+              onDelete={removeEvent}
+            />
+          ))
+        )}
       </div>
     </AppLayout>
   );

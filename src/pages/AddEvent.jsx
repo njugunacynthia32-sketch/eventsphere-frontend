@@ -1,16 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout";
+import api from "../services/api";
 import "../styles/css/AddEvent.css";
 
 function AddEvent() {
+  const navigate = useNavigate();
+
+  const [categories, setCategories] = useState([]);
+
   const [formData, setFormData] = useState({
     title: "",
-    category: "",
+    description: "",
     date: "",
     time: "",
     location: "",
-    description: "",
+    category_id: "",
   });
+
+  useEffect(() => {
+    loadCategories();
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      const data = await api.getCategories();
+      setCategories(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleChange = (e) => {
     setFormData({
@@ -19,9 +38,21 @@ function AddEvent() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Event added successfully!");
+
+    try {
+      await api.createEvent({
+        ...formData,
+        user_id: 1,
+      });
+
+      alert("Event created successfully!");
+
+      navigate("/events");
+    } catch (err) {
+      alert(err.message);
+    }
   };
 
   return (
@@ -29,7 +60,7 @@ function AddEvent() {
       <div className="add-event">
         <h1>Add Event</h1>
 
-        <form onSubmit={handleSubmit} className="event-form">
+        <form className="event-form" onSubmit={handleSubmit}>
 
           <input
             type="text"
@@ -41,18 +72,32 @@ function AddEvent() {
           />
 
           <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Choose Category</option>
-            <option>Birthday</option>
-            <option>Work</option>
-            <option>Travel</option>
-            <option>Fitness</option>
-            <option>Personal</option>
-          </select>
+  name="category_id"
+  value={formData.category_id}
+  onChange={handleChange}
+  required
+>
+  <option value="">Choose Category</option>
+
+  {categories.length > 0 ? (
+    categories.map((category) => (
+      <option
+        key={category.id}
+        value={category.id}
+      >
+        {category.name}
+      </option>
+    ))
+  ) : (
+    <>
+      <option value="1">Birthday</option>
+      <option value="2">Work</option>
+      <option value="3">Travel</option>
+      <option value="4">Fitness</option>
+      <option value="5">Personal</option>
+    </>
+  )}
+</select>
 
           <input
             type="date"
@@ -80,8 +125,8 @@ function AddEvent() {
 
           <textarea
             name="description"
-            placeholder="Description"
             rows="5"
+            placeholder="Description"
             value={formData.description}
             onChange={handleChange}
           />

@@ -1,14 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import AppLayout from "../components/layout/AppLayout";
+import api from "../services/api";
 import "../styles/css/Profile.css";
 
 function Profile() {
-  const [user] = useState({
-    name: "Cynthia Njuguna",
-    email: "cynthia@example.com",
-    phone: "+254712345678",
-    bio: "Software Engineering Student | Event Planner",
+  const navigate = useNavigate();
+
+  const [editing, setEditing] = useState(false);
+
+  const [user, setUser] = useState({
+    full_name: "",
+    email: "",
+    phone: "",
   });
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const data = await api.getProfile();
+      setUser(data);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const handleChange = (e) => {
+    setUser({
+      ...user,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const saveProfile = async () => {
+    try {
+      await api.updateProfile({
+        full_name: user.full_name,
+        phone: user.phone,
+      });
+
+      alert("Profile updated successfully");
+      setEditing(false);
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login");
+  };
 
   return (
     <AppLayout>
@@ -17,25 +62,58 @@ function Profile() {
 
         <div className="profile-card">
           <div className="profile-avatar">
-            {user.name.charAt(0)}
+            {user.full_name ? user.full_name.charAt(0) : "U"}
           </div>
 
           <div className="profile-info">
             <label>Full Name</label>
-            <input type="text" value={user.name} readOnly />
+            <input
+              type="text"
+              name="full_name"
+              value={user.full_name}
+              onChange={handleChange}
+              readOnly={!editing}
+            />
 
             <label>Email</label>
-            <input type="email" value={user.email} readOnly />
+            <input
+              type="email"
+              value={user.email}
+              readOnly
+            />
 
             <label>Phone</label>
-            <input type="text" value={user.phone} readOnly />
-
-            <label>Bio</label>
-            <textarea rows="4" value={user.bio} readOnly />
+            <input
+              type="text"
+              name="phone"
+              value={user.phone || ""}
+              onChange={handleChange}
+              readOnly={!editing}
+            />
 
             <div className="profile-buttons">
-              <button className="edit-profile-btn">Edit Profile</button>
-              <button className="logout-btn">Logout</button>
+              {!editing ? (
+                <button
+                  className="edit-profile-btn"
+                  onClick={() => setEditing(true)}
+                >
+                  Edit Profile
+                </button>
+              ) : (
+                <button
+                  className="edit-profile-btn"
+                  onClick={saveProfile}
+                >
+                  Save Changes
+                </button>
+              )}
+
+              <button
+                className="logout-btn"
+                onClick={logout}
+              >
+                Logout
+              </button>
             </div>
           </div>
         </div>

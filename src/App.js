@@ -15,6 +15,9 @@ import EditEvent from "./pages/EditEvent";
 import MyEvents from "./pages/MyEvents";
 import Profile from "./pages/Profile";
 
+// Protected Route
+import ProtectedRoute from "./components/ProtectedRoute";
+
 // Other Pages
 import NotFound from "./pages/NotFound";
 
@@ -28,14 +31,53 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
 
-        {/* Protected Routes (We'll protect these later with JWT) */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/events" element={<MyEvents />} />
-        <Route path="/events/add" element={<AddEvent />} />
-        <Route path="/events/edit/:id" element={<EditEvent />} />
-        <Route path="/profile" element={<Profile />} />
+        {/* Protected Routes */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-        {/* 404 Page */}
+        <Route
+          path="/events"
+          element={
+            <ProtectedRoute>
+              <MyEvents />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/events/add"
+          element={
+            <ProtectedRoute>
+              <AddEvent />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/events/edit/:id"
+          element={
+            <ProtectedRoute>
+              <EditEvent />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* 404 */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
