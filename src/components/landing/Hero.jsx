@@ -9,7 +9,7 @@ function Hero() {
         <div className="hero-text">
 
           <span className="badge">
-            ✨ Loved by 12,000+ planners
+            ✨ Your personal digital planner.
           </span>
 
           <h1>

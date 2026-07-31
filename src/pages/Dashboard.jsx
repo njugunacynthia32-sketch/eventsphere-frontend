@@ -1,7 +1,24 @@
+import { useEffect, useState } from "react";
 import AppLayout from "../components/layout/AppLayout";
+import api from "../services/api";
 import "../styles/css/Dashboard.css";
 
 function Dashboard() {
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
+
+  const loadEvents = async () => {
+    try {
+      const data = await api.getEvents();
+      setEvents(data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   return (
     <AppLayout>
       <header className="dashboard-header">
@@ -11,12 +28,12 @@ function Dashboard() {
 
       <section className="stats">
         <div className="stat-card">
-          <h2>12</h2>
+          <h2>{events.length}</h2>
           <p>Total Events</p>
         </div>
 
         <div className="stat-card">
-          <h2>5</h2>
+          <h2>{events.length}</h2>
           <p>Upcoming</p>
         </div>
 
@@ -29,20 +46,18 @@ function Dashboard() {
       <section className="upcoming-events">
         <h2>Upcoming Events</h2>
 
-        <div className="event-card">
-          <h3>🎂 Sarah's Birthday</h3>
-          <p>Tomorrow • 6:00 PM</p>
-        </div>
-
-        <div className="event-card">
-          <h3>💼 Team Meeting</h3>
-          <p>Friday • 10:00 AM</p>
-        </div>
-
-        <div className="event-card">
-          <h3>✈️ Nairobi Trip</h3>
-          <p>Saturday • 8:00 AM</p>
-        </div>
+        {events.length === 0 ? (
+          <p>No events yet. Create your first event!</p>
+        ) : (
+          events.map((event) => (
+            <div key={event.id} className="event-card">
+              <h3>{event.title}</h3>
+              <p>
+                {event.date} • {event.time}
+              </p>
+            </div>
+          ))
+        )}
       </section>
     </AppLayout>
   );

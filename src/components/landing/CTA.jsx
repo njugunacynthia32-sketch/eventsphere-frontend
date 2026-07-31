@@ -7,7 +7,7 @@ function CTA() {
       <h2>Start Planning Your Beautiful Moments Today</h2>
 
       <p>
-        Join thousands of users organizing their lives with EventSphere.
+        Have a clean schedule, never miss an event, and enjoy every moment with EventSphere. Sign up now to start planning your life beautifully. 
       </p>
 
       <Link to="/register" className="cta-btn">
