@@ -1,4 +1,5 @@
-const API_URL = "/api";
+const API_URL = "https://eventsphere-backend-ow3e.onrender.com/api";
+
 
 const request = async (endpoint, options = {}) => {
   const token = localStorage.getItem("token");
